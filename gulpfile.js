@@ -1,10 +1,4 @@
 /**
-
-Gulp Boilerplate
-
-*/
-
-/**
  * Required plugins
  */
 const gulp = require('gulp');
@@ -73,7 +67,7 @@ gulp.task('browserSync', function() {
 
 /**
  * JS concatenation and minification
-*/
+ */
 gulp.task('useref', function(){
     userefUglify(config.app);
 });
@@ -81,7 +75,6 @@ gulp.task('useref', function(){
 function userefUglify(cfg){
     return gulp.src(cfg.html.src)
         .pipe(useref())
-        // Minifies only if it's a JavaScript file
         .pipe(gulpIf('*.js', uglify()))
         .pipe(gulp.dest('dist'))
 }
@@ -101,23 +94,20 @@ gulp.task('cache:clear', function (callback) {
 });
 
 /**
- * Copy the images folder to the dist folder
+ * Copy the required src folders to the dist folder
  */
-function copyImagesFolder(cfg){
-    return gulp.src(cfg.images.src)
-        .pipe(gulp.dest(cfg.images.dest));
+function copyAssetsFolder(cfg){
+    return gulp.src(cfg.assets.src)
+        .pipe(gulp.dest(cfg.assets.dest));
 }
 
-gulp.task('copy-images-folder', function(){
-    copyImagesFolder(config.app);
+gulp.task('copy-assets-folder', function(){
+    copyAssetsFolder(config.app);
 });
 
 /**
  * Build task for production environment
  */
 gulp.task('build', function (callback) {
-    runSequence('clean:dist',
-        ['copy-images-folder', 'useref'],
-        callback
-    )
+    runSequence('clean:dist', ['copy-assets-folder', 'useref'], callback);
 });
