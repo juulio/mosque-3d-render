@@ -145,14 +145,14 @@
 
         // Load first texture
         loader = new THREE.ImageLoader( manager );
-        loader.load( './img/textures/stone.png', function ( image ) {
+        loader.load( './assets/textures/stone.png', function ( image ) {
             texture.image = image;
             texture.needsUpdate = true;
         } );
 
         // Load second texture
         loader = new THREE.ImageLoader( manager );
-        loader.load( './img/textures/disturb.jpg', function ( image ) {
+        loader.load( './assets/textures/disturb.jpg', function ( image ) {
             texture2.image = image;
             texture2.needsUpdate = true;
         } );
@@ -298,7 +298,7 @@
 
         // Load first texture
         loader = new THREE.ImageLoader( manager );
-        loader.load( './img/textures/stone.png', function ( image ) {
+        loader.load( './assets/textures/stone.png', function ( image ) {
             texture.image = image;
             texture.needsUpdate = true;
         } );
@@ -351,7 +351,7 @@
      * THREE.CylinderGeometry(radiusTop, radiusBottom, height, radiusSegments)
      */
     function renderMinaret(position){
-        var arabicTexture =  new THREE.TextureLoader().load('./img/textures/arabic08.jpg');
+        var arabicTexture =  new THREE.TextureLoader().load('./assets/textures/arabic08.jpg');
         var material = new THREE.MeshBasicMaterial( { map: arabicTexture } );
         var minaretGeometry = new THREE.CylinderGeometry( 1, 1, 45, 32 );
 
@@ -371,7 +371,7 @@
      * Render the booths on minarets
      */
     function renderBooth(position, radius){
-        var stoneTexture =  new THREE.TextureLoader().load('./img/textures/arabic08.jpg');
+        var stoneTexture =  new THREE.TextureLoader().load('./assets/textures/arabic08.jpg');
         var material = new THREE.MeshBasicMaterial( { map: stoneTexture } );
         var boothGeometry = new THREE.CylinderGeometry( radius, radius, 5, 5 );
         var booth = new THREE.Mesh(boothGeometry, material);
@@ -395,7 +395,7 @@
      * Render skybox
      */
     function renderSkybox(){
-        var urls = [ "./img/skybox/mars_back.png", "./img/skybox/mars_front.png", "./img/skybox/mars_top.png", "./img/skybox/mars_bottom.png", "./img/skybox/mars_right.png", "./img/skybox/mars_left.png"];
+        var urls = [ "./assets/skybox/mars_back.png", "./assets/skybox/mars_front.png", "./assets/skybox/mars_top.png", "./assets/skybox/mars_bottom.png", "./assets/skybox/mars_right.png", "./assets/skybox/mars_left.png"];
         var cubeMaterials = [
             // Do not modify the images order
             new THREE.MeshBasicMaterial( {map: new THREE.TextureLoader().load(urls[0]), side: THREE.DoubleSide } ),
