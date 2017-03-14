@@ -1,12 +1,13 @@
 {
     "app" : {
         "baseDir" : "app",
+        "distFolder" : "dist/",
         "js" : {
             "src" : "app/js/**/*.js"
         },
-        "images" : {
-            "src" : "app/img/**/*",
-            "dest" : "dist/img/"
+        "assets" : {
+            "src" : "app/assets/**/*",
+            "dest" : "dist/assets/"
         },
         "html" : {
             "src" : "app/*.html"
