@@ -17,11 +17,10 @@ const config = require('./config.json');
  * Inject javascript file references to index.html file
  */
 gulp.task('index', function () {
-    gulp.src('./app/index.html')
-        .pipe(inject(gulp.src(['./app/js/vendor/three.min.js/','./app/js/vendor/**/*.js'], {read: false}), {relative: true}))
+    return gulp.src('./app/index.html')
+        .pipe(inject(gulp.src(['./app/js/vendor/three.min.js','./app/js/vendor/**/*.js'], {read: false}), {relative: true}))
         .pipe(gulp.dest('app/'));
 });
-
 
 /**
  * Check javascript for syntax errors
@@ -46,15 +45,6 @@ gulp.task('watch', function (){
 });
 
 /**
- * Default taks for the Development Environment
- */
-gulp.task('default', function (callback) {
-    runSequence(['index', 'lint', 'browserSync', 'watch'],
-        callback
-    );
-});
-
-/**
  * Automatic Browser reload
  */
 gulp.task('browserSync', function() {
@@ -64,6 +54,7 @@ gulp.task('browserSync', function() {
         },
     })
 });
+
 
 /**
  * JS concatenation and minification
@@ -109,5 +100,12 @@ gulp.task('copy-assets-folder', function(){
  * Build task for production environment
  */
 gulp.task('build', function (callback) {
-    runSequence('clean:dist', ['copy-assets-folder', 'useref'], callback);
+    runSequence('clean:dist',
+        ['copy-assets-folder', 'useref'],
+        callback
+    );
 });
+
+gulp.task('new-build', gulp.series('clean:dist', gulp.parallel('copy-assets-folder', 'useref')));
+
+gulp.task('default', gulp.series(gulp.parallel('index', 'lint'), 'browserSync', 'watch'));
