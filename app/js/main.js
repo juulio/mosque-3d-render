@@ -43,7 +43,7 @@
      * Init all functions
      */
     function init() {
-        let bodyEl = document.body;
+        var bodyEl = document.body;
         bodyEl.style.margin = 0;
         bodyEl.style.overflow = "hidden";
 
