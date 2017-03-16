@@ -2,15 +2,15 @@
  * Required plugins
  */
 const gulp = require('gulp');
+const gulpif = require('gulp-if');
+const cache = require('gulp-cache');
+const clean = require('gulp-clean');
 const jshint = require('gulp-jshint');
-const browserSync = require('browser-sync').create();
 const useref = require('gulp-useref');
 const uglify = require('gulp-uglify');
-const gulpIf = require('gulp-if');
-const cache = require('gulp-cache');
-const del = require('del');
 const runSequence = require('run-sequence');
 const inject = require('gulp-inject');
+const browserSync = require('browser-sync').create();
 const config = require('./config.json');
 
 /**
@@ -60,21 +60,23 @@ gulp.task('browserSync', function() {
  * JS concatenation and minification
  */
 gulp.task('useref', function(){
-    userefUglify(config.app);
+    return gulp.src(config.app.html.src)
+        .pipe(useref())
+        .pipe(gulp.dest('dist'))
 });
 
-function userefUglify(cfg){
-    return gulp.src(cfg.html.src)
-        .pipe(useref())
-        .pipe(gulpIf('*.js', uglify()))
-        .pipe(gulp.dest('dist'))
-}
+gulp.task('minifyJs', function() {
+    return gulp.src('dist/js/main.min.js')
+        .pipe(uglify())
+        .pipe(gulp.dest('dist/js'))
+});
 
 /**
- * Clean production envirnomnet
+ * Clean production dist folder
  */
-gulp.task('clean:dist', function() {
-    return del.sync('dist');
+gulp.task('clean:dist', function () {
+    return gulp.src('dist/*', {read: false})
+        .pipe(clean());
 });
 
 /**
@@ -87,25 +89,17 @@ gulp.task('cache:clear', function (callback) {
 /**
  * Copy the required src folders to the dist folder
  */
-function copyAssetsFolder(cfg){
-    return gulp.src(cfg.assets.src)
-        .pipe(gulp.dest(cfg.assets.dest));
-}
-
 gulp.task('copy-assets-folder', function(){
-    copyAssetsFolder(config.app);
+    return gulp.src(config.app.assets.src)
+        .pipe(gulp.dest(config.app.assets.dest));
 });
+
+/**
+ * Default task for development environment
+ */
+gulp.task('default', gulp.series(gulp.parallel('index', 'lint'), 'browserSync', 'watch'));
 
 /**
  * Build task for production environment
  */
-gulp.task('build', function (callback) {
-    runSequence('clean:dist',
-        ['copy-assets-folder', 'useref'],
-        callback
-    );
-});
-
-gulp.task('new-build', gulp.series('clean:dist', gulp.parallel('copy-assets-folder', 'useref')));
-
-gulp.task('default', gulp.series(gulp.parallel('index', 'lint'), 'browserSync', 'watch'));
+gulp.task('build', gulp.series('clean:dist', gulp.parallel('copy-assets-folder', 'useref'), 'minifyJs'));
