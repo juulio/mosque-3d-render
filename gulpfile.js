@@ -3,12 +3,10 @@
  */
 const gulp = require('gulp');
 const gulpif = require('gulp-if');
-const cache = require('gulp-cache');
 const clean = require('gulp-clean');
 const jshint = require('gulp-jshint');
 const useref = require('gulp-useref');
 const uglify = require('gulp-uglify');
-const runSequence = require('run-sequence');
 const inject = require('gulp-inject');
 const browserSync = require('browser-sync').create();
 const config = require('./config.json');
@@ -62,13 +60,8 @@ gulp.task('browserSync', function() {
 gulp.task('useref', function(){
     return gulp.src(config.app.html.src)
         .pipe(useref())
+        .pipe(gulpif('*.js', uglify()))
         .pipe(gulp.dest('dist'))
-});
-
-gulp.task('minifyJs', function() {
-    return gulp.src('dist/js/main.min.js')
-        .pipe(uglify())
-        .pipe(gulp.dest('dist/js'))
 });
 
 /**
@@ -80,14 +73,7 @@ gulp.task('clean:dist', function () {
 });
 
 /**
- * Cache clear task
- */
-gulp.task('cache:clear', function (callback) {
-    return cache.clearAll(callback)
-});
-
-/**
- * Copy the required src folders to the dist folder
+ * Copy the required assets folders to the dist folder
  */
 gulp.task('copy-assets-folder', function(){
     return gulp.src(config.app.assets.src)
@@ -102,4 +88,4 @@ gulp.task('default', gulp.series(gulp.parallel('index', 'lint'), 'browserSync', 
 /**
  * Build task for production environment
  */
-gulp.task('build', gulp.series('clean:dist', gulp.parallel('copy-assets-folder', 'useref'), 'minifyJs'));
+gulp.task('build', gulp.series('clean:dist', gulp.parallel('copy-assets-folder', 'useref')));
