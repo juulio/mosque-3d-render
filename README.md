@@ -1,8 +1,6 @@
-# Possible - Costa Rica
+# Mosque 3D Render 
 
-## Gulp Boilerplate
-
-* This project is intended to be used as a template to work with GULP.
+* This project is a THREE.js experiment to test model import from Blender. Using two simple models, I made a mosque building, inspired on Iran mosques.
 
 ### installation
 0. Make sure you have npm, Node.js and Gulp installed on your local machine 
@@ -18,8 +16,6 @@ CSS and javascript will not be minified.
 CSS and javascript will be minified.
 
 ### gulpfile tasks
-* **sass**: takes all scss files on the app/scss folder and creates the app/css/styles.css file.
-* **minify-css**: minifies the app/css/styles.css file.
 * **browserSync**: reloads the app on the browser.
 * **useref**: concatenates referenced non-optimized js and css files. Uses gulpIf and uglify to minify javascript files.
 * **clean**:dist: cleans the dist production environment.
@@ -31,5 +27,4 @@ CSS and javascript will be minified.
 There's a .gitignore file. It avoids the following files and folders to be included on the git repository.
 * the node_modules folder
 * DS_Store files
-* sass-cache files
 * dist production folder
