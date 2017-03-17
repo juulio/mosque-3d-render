@@ -31,11 +31,11 @@ gulp.task('lint', function() {
 
 /**
  * Watch project files and reload the screen
+ * Reloads the browser whenever HTML or JS files change
  */
 function watchAll(cfg){
-    // Reloads the browser whenever HTML or JS files change
     gulp.watch(cfg.html.src, browserSync.reload);
-    gulp.watch(cfg.js.src, gulp.series(['lint', browserSync.reload]));  
+    gulp.watch(cfg.js.src).on('change', gulp.series('lint', browserSync.reload));
 }
 
 gulp.task('watch', function (){
