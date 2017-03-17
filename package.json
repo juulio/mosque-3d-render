@@ -9,7 +9,6 @@
   "license": "ISC",
   "devDependencies": {
     "browser-sync": "^2.11.1",
-    "del": "^2.2.0",
     "gulp": "github:gulpjs/gulp#4.0",
     "gulp-cache": "^0.4.2",
     "gulp-clean": "^0.3.2",

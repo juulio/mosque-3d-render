@@ -35,24 +35,23 @@ gulp.task('lint', function() {
 function watchAll(cfg){
     // Reloads the browser whenever HTML or JS files change
     gulp.watch(cfg.html.src, browserSync.reload);
-    gulp.watch(cfg.js.src, ['lint', browserSync.reload]);  
+    gulp.watch(cfg.js.src, gulp.series(['lint', browserSync.reload]));  
 }
 
 gulp.task('watch', function (){
     watchAll(config.app); 
 });
 
-/**
+/**d
  * Automatic Browser reload
  */
-gulp.task('browserSync', function() {
+gulp.task('browserSync', function(callback) {
     browserSync.init({
         server: {
           baseDir: 'app'
-        },
-    })
+        }
+    }, callback)
 });
-
 
 /**
  * JS concatenation and minification
@@ -83,7 +82,7 @@ gulp.task('copy-assets-folder', function(){
 /**
  * Default task for development environment
  */
-gulp.task('default', gulp.series(gulp.parallel('index', 'lint'), 'browserSync', 'watch'));
+gulp.task('default', gulp.series(gulp.parallel('index', 'lint'), 'browserSync',  'watch'));
 
 /**
  * Build task for production environment
