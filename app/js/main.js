@@ -21,12 +21,9 @@
 
     var camera, scene, renderer, container;
 
-    var controls;
+    var controls, loader;
 
     var objects = [];
-
-    var loader;
-    
 
     var moveForward = false;
     var moveBackward = false;
@@ -51,11 +48,11 @@
         document.body.appendChild( container );
 
         // camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 1000 );
-        camera = new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 1, 15000 );
-
+        // camera = new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 1, 15000 );
+        camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 1000 );
+        camera.position.z = 300;
         // camera.position.z = 78;
         // camera.position.x = -483;
-        // camera.position.z = 100;
 
         // camera.lookAt(200, 0.8, 0);
         // scene
@@ -81,6 +78,7 @@
         renderNewBuilding();
         renderMinaret(new THREE.Vector3(7, 22.5, -19)); // left minaret
         renderMinaret(new THREE.Vector3(15, 22.5, -19)); // right minaret
+        renderFloor();
 
         var geometry = new THREE.SphereGeometry( 9, 32, 32 );
         var material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
@@ -94,15 +92,6 @@
         container.appendChild( renderer.domElement );
 
         controls = new THREE.OrbitControls( camera, renderer.domElement );
-
-        // window.addEventListener('mousemove', function(e){
-        //     var mouse3D = new THREE.Vector3(
-        //         ( event.clientX / window.innerWidth ) * 2 - 1,
-        //         - ( event.clientY / window.innerHeight ) * 2 + 1,
-        //         0.5 );
-
-        //     // lookAt(mouse3D);
-        // });
 
         window.addEventListener( 'resize', onWindowResize, false );
     }
@@ -305,7 +294,7 @@
 
         // Load models
         loader = new THREE.OBJLoader( manager );
-        loader.load( 'models/blueArch/blue_arch.obj', function ( object ) {
+        loader.load( './assets/models/blueArch/blue_arch.obj', function ( object ) {
 
             object.traverse( function ( child ) {
                 if ( child instanceof THREE.Mesh ) {
@@ -417,6 +406,36 @@
         scene.add( skybox );
     }
 
+    /*
+     * Render floor
+     */
+    function renderFloor(){
+        var geometry = new THREE.PlaneGeometry( 2000, 2000, 100, 100 );
+        geometry.rotateX( - Math.PI / 2 );
+
+        for ( var i = 0, l = geometry.vertices.length; i < l; i ++ ) {
+
+            var vertex = geometry.vertices[ i ];
+            vertex.x += Math.random() * 20 - 10;
+            vertex.y += Math.random() * 2;
+            vertex.z += Math.random() * 20 - 10;
+
+        }
+
+        for ( var i = 0, l = geometry.faces.length; i < l; i ++ ) {
+
+            var face = geometry.faces[ i ];
+            face.vertexColors[ 0 ] = new THREE.Color().setHSL( Math.random() * 0.3 + 0.5, 0.75, Math.random() * 0.25 + 0.75 );
+            face.vertexColors[ 1 ] = new THREE.Color().setHSL( Math.random() * 0.3 + 0.5, 0.75, Math.random() * 0.25 + 0.75 );
+            face.vertexColors[ 2 ] = new THREE.Color().setHSL( Math.random() * 0.3 + 0.5, 0.75, Math.random() * 0.25 + 0.75 );
+
+        }
+
+        var material = new THREE.MeshBasicMaterial( { vertexColors: THREE.VertexColors } );
+
+        var mesh = new THREE.Mesh( geometry, material );
+        scene.add( mesh );
+    }
     /*
      *
      */
