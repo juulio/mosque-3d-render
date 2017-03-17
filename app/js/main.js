@@ -47,18 +47,11 @@
         container = document.createElement( 'div' );
         document.body.appendChild( container );
 
-        // camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 1000 );
-        // camera = new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 1, 15000 );
         camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 1000 );
-        camera.position.z = 300;
-        // camera.position.z = 78;
-        // camera.position.x = -483;
+        camera.position.z = 280;
+        camera.position.y = 16;
 
-        // camera.lookAt(200, 0.8, 0);
-        // scene
         scene = new THREE.Scene();
-        // camera.lookAt( scene.position );
-
 
         // scene.fog = new THREE.Fog( 0xeecbad, 20, 120 );
 
@@ -422,7 +415,7 @@
 
         }
 
-        for ( var i = 0, l = geometry.faces.length; i < l; i ++ ) {
+        for ( i = 0, l = geometry.faces.length; i < l; i ++ ) {
 
             var face = geometry.faces[ i ];
             face.vertexColors[ 0 ] = new THREE.Color().setHSL( Math.random() * 0.3 + 0.5, 0.75, Math.random() * 0.25 + 0.75 );
@@ -455,7 +448,6 @@
 
 
         renderer.render( scene, camera );
-
     }
 
     // Keep only if public vars are needed.
