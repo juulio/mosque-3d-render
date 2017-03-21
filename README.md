@@ -1,8 +1,9 @@
 # Mosque 3D Render 
 
-* This project is a THREE.js experiment. The purpose is to import a 3D model from Blender and build a Mosque building, inspired on Iranian mosques.
+### Summary
+This project is a THREE.js experiment. The purpose is to import a 3D model from Blender and build a Mosque building, inspired on Iranian mosques.
 
-### installation
+### Installation
 1. **Verify Node, NPM and Gulp**  
 Make sure you have npm, Node.js and Gulp installed on your local machine.  
 To install Node and npm check https://nodejs.org/en/download/  
@@ -15,7 +16,7 @@ Go into the desired folder and type `git clone https://github.com/juulio/mosque-
 Go into the recently cloned folder, make sure there's a **package.json** file and type `npm install`.  
 When this command is properly finished, there will be a new **node_modules** folder. This folder will always be ignored by git.
 
-### Run the project
+### Running the project
 To run the project type `gulp`.  
 Gulp will start a web server and the project will be loaded on a web browser.  
 Javascript files will not be minified.
