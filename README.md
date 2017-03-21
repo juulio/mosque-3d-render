@@ -17,10 +17,13 @@ When this command is properly finished, there will be a new **node_modules** fol
 
 ### Run the project
 To run the project type `gulp`.  
-The project will be loaded on a web browser.  
+Gulp will start a web server and the project will be loaded on a web browser.  
 Javascript files will not be minified.
 
-5. To build the project (dist) type `gulp build`.
+
+### Production build
+Whenever you feel your project is ready, go into the project folder, and type `gulp build`.  
+A **dist** folder will be generated. It'll have all the js files concatenated into a **main.min.js** file.
 
 ### gulpfile tasks
 * **browserSync**: reloads the app on the browser.
