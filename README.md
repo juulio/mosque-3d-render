@@ -7,12 +7,11 @@
 To install Node and npm check https://nodejs.org/en/download/  
 To install Gulp check https://github.com/gulpjs/gulp/blob/master/docs/getting-started.md  
 
-2. Clone this project into the desired folder  
-On a terminal, type  
-`git clone https://github.com/juulio/mosque-3d-render.git`
+2. To clone this project: go into the desired folder and type `git clone https://github.com/juulio/mosque-3d-render.git`
 
-3. On a terminal, go into the project's folder and type `npm install`.  
-Make sure there's a package.json file on this folder. After this command is properly finished, there will be a new 'node_modules' folder.
+3. To install all the project's dependencies, go into the project's folder and type `npm install`.  
+Make sure there's a package.json file on this folder.
+When this command is properly finished, there will be a new **node_modules** folder.
 
 4. To run the project type `gulp`.
 CSS and javascript will not be minified.
