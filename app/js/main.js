@@ -1,5 +1,10 @@
 /*
  * TODO
+ * Change floor tiles, make them look like a Mosque floor
+ * Define Building structure: 4 minarets
+ * Maybe separate code into several files
+ * Update Gulp Boilerplate
+ * Update THREE.js boilerplate
  */
 
 /*
@@ -40,33 +45,12 @@
      * Init all functions
      */
     function init() {
-        var bodyEl = document.body;
-        bodyEl.style.margin = 0;
-        bodyEl.style.overflow = "hidden";
-
-        container = document.createElement( 'div' );
-        document.body.appendChild( container );
-
-        camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 1000 );
-        camera.position.z = 280;
-        camera.position.y = 16;
-
-        scene = new THREE.Scene();
-
-        // scene.fog = new THREE.Fog( 0xeecbad, 20, 120 );
-
-        var light = new THREE.HemisphereLight( 0xeeeeff, 0x777788, 0.75 );
-        light.position.set( 0.5, 1, 0.75 );
-        scene.add( light );
-
-        var directionalLight = new THREE.DirectionalLight( 0xffffff);
-        directionalLight.position.set( 0, -3, 1 );
-        scene.add( directionalLight );
+        setScene();
 
         // Render Elements on the Screen
         // renderHelpers();
         // renderBuilding();
-        renderSkybox();
+        // renderSkybox();
 
         renderNewBuilding();
         renderMinaret(new THREE.Vector3(7, 22.5, -19)); // left minaret
@@ -78,6 +62,36 @@
         var sphere = new THREE.Mesh( geometry, material );
         sphere.position.set(0, 15, 0);
         // scene.add( sphere );
+
+        
+    }
+
+    /*
+     * Sets initial elements for the scene
+     */
+    function setScene(){
+        var bodyEl = document.body;
+        bodyEl.style.margin = 0;
+        bodyEl.style.overflow = "hidden";
+
+        container = document.createElement( 'div' );
+        document.body.appendChild( container );
+
+        camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 1000 );
+        camera.position.z = 120;
+        camera.position.y = 16;
+
+        scene = new THREE.Scene();
+
+        // scene.fog = new THREE.Fog( 0xeecbad, 10, 1020 );
+
+        var light = new THREE.HemisphereLight( 0xeeeeff, 0x777788, 0.75 );
+        light.position.set( 0.5, 1, 0.75 );
+        scene.add( light );
+
+        var directionalLight = new THREE.DirectionalLight( 0xffffff);
+        directionalLight.position.set( 0, -3, 1 );
+        scene.add( directionalLight );
 
         renderer = new THREE.WebGLRenderer();
         renderer.setPixelRatio( window.devicePixelRatio );
@@ -299,7 +313,7 @@
             object.position.z = -25;
             object.rotation.y = -Math.PI / 2;
             
-            for(var i=-500;i<500;i+=archWidth){
+            for(var i=-100;i<100;i+=archWidth){
                 arch = object.clone();
                 arch.position.x = i;
                 scene.add(arch);
@@ -403,24 +417,27 @@
      * Render floor
      */
     function renderFloor(){
-        var geometry = new THREE.PlaneGeometry( 2000, 2000, 100, 100 );
+        var geometry = new THREE.PlaneGeometry( 200, 200, 100, 100 );
         geometry.rotateX( - Math.PI / 2 );
 
         for ( var i = 0, l = geometry.vertices.length; i < l; i ++ ) {
 
             var vertex = geometry.vertices[ i ];
-            vertex.x += Math.random() * 20 - 10;
-            vertex.y += Math.random() * 2;
-            vertex.z += Math.random() * 20 - 10;
-
+            vertex.x += Math.random() * 20 - 1;
+            // vertex.y += Math.random() * 4;
+            vertex.y += Math.random() * 1;
+            vertex.z += Math.random() * 15 - 10;
         }
 
         for ( i = 0, l = geometry.faces.length; i < l; i ++ ) {
 
             var face = geometry.faces[ i ];
-            face.vertexColors[ 0 ] = new THREE.Color().setHSL( Math.random() * 0.3 + 0.5, 0.75, Math.random() * 0.25 + 0.75 );
-            face.vertexColors[ 1 ] = new THREE.Color().setHSL( Math.random() * 0.3 + 0.5, 0.75, Math.random() * 0.25 + 0.75 );
-            face.vertexColors[ 2 ] = new THREE.Color().setHSL( Math.random() * 0.3 + 0.5, 0.75, Math.random() * 0.25 + 0.75 );
+            // face.vertexColors[ 0 ] = new THREE.Color().setHSL( Math.random() * 0.3 + 0.5, 0.75, Math.random() * 0.25 + 0.75 );
+            // face.vertexColors[ 1 ] = new THREE.Color().setHSL( Math.random() * 0.3 + 0.5, 0.75, Math.random() * 0.25 + 0.75 );
+            // face.vertexColors[ 2 ] = new THREE.Color().setHSL( Math.random() * 0.3 + 0.5, 0.75, Math.random() * 0.25 + 0.75 );
+            face.vertexColors[ 0 ] = new THREE.Color().setRGB(1, 0.972, 0.862);
+            face.vertexColors[ 1 ] = new THREE.Color().setRGB(0.921, 0.725, 0.537);
+            face.vertexColors[ 2 ] = new THREE.Color().setRGB(0.929, 0.847, 0.568);
 
         }
 
