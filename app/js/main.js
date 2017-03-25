@@ -48,13 +48,18 @@
         setScene();
 
         // Render Elements on the Screen
-        // renderHelpers();
+        renderHelpers();
         // renderBuilding();
         // renderSkybox();
 
         renderNewBuilding();
-        renderMinaret(new THREE.Vector3(7, 22.5, -19)); // left minaret
-        renderMinaret(new THREE.Vector3(15, 22.5, -19)); // right minaret
+
+        var minaretHeight = 36;
+        renderMinaret(new THREE.Vector3(-80, minaretHeight/2, 80), minaretHeight); // front left
+        renderMinaret(new THREE.Vector3(80, minaretHeight/2, 80), minaretHeight); // front right
+        renderMinaret(new THREE.Vector3(-80, minaretHeight/2, 0), minaretHeight); // rear left
+        renderMinaret(new THREE.Vector3(80, minaretHeight/2, 0), minaretHeight); // rear right
+        
         renderFloor();
 
         var geometry = new THREE.SphereGeometry( 9, 32, 32 );
@@ -78,8 +83,9 @@
         document.body.appendChild( container );
 
         camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 1000 );
-        camera.position.z = 120;
-        camera.position.y = 16;
+        camera.position.x = -140;
+        camera.position.y = 40;
+        camera.position.z = 160;
 
         scene = new THREE.Scene();
 
@@ -108,7 +114,7 @@
      */
     function renderHelpers(){
         var gridXZ = new THREE.GridHelper(60, 33);
-        scene.add(gridXZ);
+        // scene.add(gridXZ);
 
         var axisHelper = new THREE.AxisHelper( 25 );
         scene.add( axisHelper );
@@ -346,10 +352,10 @@
      * Render minaret models and place them on the mosque
      * THREE.CylinderGeometry(radiusTop, radiusBottom, height, radiusSegments)
      */
-    function renderMinaret(position){
+    function renderMinaret(position, height){
         var arabicTexture =  new THREE.TextureLoader().load('./assets/textures/arabic08.jpg');
         var material = new THREE.MeshBasicMaterial( { map: arabicTexture } );
-        var minaretGeometry = new THREE.CylinderGeometry( 1, 1, 45, 32 );
+        var minaretGeometry = new THREE.CylinderGeometry( 1, 1, height, 32 );
 
 
         var minaret = new THREE.Mesh(minaretGeometry, material);
@@ -417,7 +423,7 @@
      * Render floor
      */
     function renderFloor(){
-        var geometry = new THREE.PlaneGeometry( 200, 200, 100, 100 );
+        var geometry = new THREE.PlaneGeometry( 160, 80, 100, 100 );
         geometry.rotateX( - Math.PI / 2 );
 
         for ( var i = 0, l = geometry.vertices.length; i < l; i ++ ) {
@@ -436,14 +442,16 @@
             // face.vertexColors[ 1 ] = new THREE.Color().setHSL( Math.random() * 0.3 + 0.5, 0.75, Math.random() * 0.25 + 0.75 );
             // face.vertexColors[ 2 ] = new THREE.Color().setHSL( Math.random() * 0.3 + 0.5, 0.75, Math.random() * 0.25 + 0.75 );
             face.vertexColors[ 0 ] = new THREE.Color().setRGB(1, 0.972, 0.862);
-            face.vertexColors[ 1 ] = new THREE.Color().setRGB(0.921, 0.725, 0.537);
-            face.vertexColors[ 2 ] = new THREE.Color().setRGB(0.929, 0.847, 0.568);
+            face.vertexColors[ 1 ] = new THREE.Color().setRGB(0.713, 0.439, 0.227);
+            face.vertexColors[ 2 ] = new THREE.Color().setRGB(0.580, 0.419, 0.298);
 
         }
 
         var material = new THREE.MeshBasicMaterial( { vertexColors: THREE.VertexColors } );
 
         var mesh = new THREE.Mesh( geometry, material );
+        mesh.position.setZ(40);
+        mesh.position.setX(-7);
         scene.add( mesh );
     }
     /*
