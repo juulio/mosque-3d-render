@@ -48,9 +48,9 @@
         setScene();
 
         // Render Elements on the Screen
-        renderHelpers();
-        // renderBuilding();
-        // renderSkybox();
+        // renderHelpers();
+        renderBuilding();
+        renderSkybox();
 
         renderNewBuilding();
 
@@ -161,7 +161,7 @@
 
         // Load models
         loader = new THREE.OBJLoader( manager );
-        loader.load( 'models/arc.obj', function ( object ) {
+        loader.load( './assets/models/arc.obj', function ( object ) {
 
             object.traverse( function ( child ) {
                 if ( child instanceof THREE.Mesh ) {
@@ -171,7 +171,7 @@
             object.position.x = -19;
             object.rotation.y = -Math.PI / 2;
             object.position.z = -19;
-            // scene.add( object );
+            scene.add( object );
 
             //------------------------------------------
             // 1. Render back side archs
@@ -246,7 +246,7 @@
 
         // Render big central Archs
         var loader2 = new THREE.OBJLoader( manager );
-        loader2.load( 'models/arc.obj', function ( object ) {
+        loader2.load( './assets/models/arc.obj', function ( object ) {
 
             object.traverse( function ( child ) {
                 if ( child instanceof THREE.Mesh ) {
@@ -279,7 +279,7 @@
     function renderNewBuilding(){
         var texture = new THREE.Texture();
         var arch;
-        var archWidth = 15;
+        var archWidth = 12;
         var mosqueLeft = new THREE.Object3D();
 
         // Load textures
@@ -315,35 +315,40 @@
                 }
             } );
 
-            object.position.x = -30;
-            object.position.z = -25;
+            // object.position.x = -30;
+            object.position.z = 4;
             object.rotation.y = -Math.PI / 2;
             
-            for(var i=-100;i<100;i+=archWidth){
+            for(var i=-80;i<80;i+=archWidth){
                 arch = object.clone();
                 arch.position.x = i;
                 scene.add(arch);
             }
 
+            object.position.z = 76;
+            for(var i=-80;i<80;i+=archWidth){
+                arch = object.clone();
+                arch.position.x = i;
+                scene.add(arch);
+            }
+
+            object.rotation.y = 0;
+            // object.position.z = 76;
+            for(var i=-40;i<40;i+=archWidth){
+                arch = object.clone();
+                arch.position.x = -80;
+                arch.position.z = i+40;
+                scene.add(arch);
+            }
+
+            for(var i=-40;i<40;i+=archWidth){
+                arch = object.clone();
+                arch.position.x = 80;
+                arch.position.z = i+40;
+                scene.add(arch);
+            }
+
             
-
-            //     //------------------------------------------
-            //     // 1. Render side archs
-            //     // 2.a First Level Archs
-            //     var leftSideArch, rightSideArch;
-            //     for(var i=-19;i<10;i+=2){
-            //         leftSideArch = object.clone();
-            //         leftSideArch.position.x = -2;
-            //         leftSideArch.position.z = i;
-            //         leftSideArch.rotation.y = Math.PI;
-            //         mosqueLeft.add(leftSideArch);
-
-            //         rightSideArch = leftSideArch.clone();
-            //         rightSideArch.position.x = 24;
-            //         rightSideArch.position.z = i;
-            //         rightSideArch.rotation.y = -Math.PI;
-            //         mosqueLeft.add(rightSideArch);
-            //     }
 
         }, onProgress, onError );
     }
