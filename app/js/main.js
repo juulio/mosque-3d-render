@@ -40,7 +40,7 @@ MOSQUE.Tree = function(position, height, scale){
  * @class Tree
  * @namespace MOSQUE
  */
-MOSQUE.Tree.prototype.drawTree = function(){
+MOSQUE.Tree.prototype.renderTree = function(){
     var treeGroup = new THREE.Group();  
 
     // Tree Trunk
@@ -74,6 +74,96 @@ MOSQUE.Tree.prototype.drawTree = function(){
     return treeGroup;
 };
 
+/**
+ * Creates a Building object
+ * @class building
+ * @constructor
+ * @namespace MOSQUE
+ * @param {THREE.Vector3} position
+ * @param {Number} scale
+ */
+MOSQUE.Building = function(position){
+    this.position = position;
+};
+
+/**
+ * Load textures, models and render the 3D building using the new Arch model (imported from Blender)
+ */
+MOSQUE.Building.prototype.renderBuilding = function(){
+
+    var texture = new THREE.Texture();
+    var arch;
+    var archWidth = 12;
+    var mosqueBuildingGroup = new THREE.Object3D();
+
+    // Load textures
+    var manager = new THREE.LoadingManager();
+    manager.onProgress = function ( item, loaded, total ) {
+        // console.log( item, loaded, total );
+    };
+
+    var onProgress = function ( xhr ) {
+        if ( xhr.lengthComputable ) {
+            var percentComplete = xhr.loaded / xhr.total * 100;
+            // console.log( Math.round(percentComplete, 2) + '% downloaded' );
+        }
+    };
+
+    var onError = function ( xhr ) {
+    };
+
+    // Load first texture
+    loader = new THREE.ImageLoader( manager );
+    loader.load( './assets/textures/stone.png', function ( image ) {
+        texture.image = image;
+        texture.needsUpdate = true;
+    } );
+
+    // Load models
+    loader = new THREE.OBJLoader( manager );
+    loader.load( './assets/models/blueArch/blue_arch.obj', function ( object ) {
+
+        object.traverse( function ( child ) {
+            if ( child instanceof THREE.Mesh ) {
+                child.material.map = texture;
+            }
+        } );
+
+        object.position.z = 4;
+        object.rotation.y = -Math.PI / 2;
+        
+        for(var i=-80;i<80;i+=archWidth){
+            arch = object.clone();
+            arch.position.x = i;
+            mosqueBuildingGroup.add(arch);
+        }
+
+        object.position.z = 76;
+        for(i=-80;i<80;i+=archWidth){
+            arch = object.clone();
+            arch.position.x = i;
+            mosqueBuildingGroup.add(arch);
+        }
+
+        object.rotation.y = 0;
+        for(i=-40;i<40;i+=archWidth){
+            arch = object.clone();
+            arch.position.x = -80;
+            arch.position.z = i+40;
+            mosqueBuildingGroup.add(arch);
+        }
+
+        for(i=-40;i<40;i+=archWidth){
+            arch = object.clone();
+            arch.position.x = 80;
+            arch.position.z = i+40;
+            mosqueBuildingGroup.add(arch);
+        }
+    }, onProgress, onError );
+
+    return mosqueBuildingGroup;
+};
+
 MOSQUE.main = (function () {
 
     var camera, scene, renderer;
@@ -99,11 +189,15 @@ MOSQUE.main = (function () {
         setScene();
 
         // Render Elements on the Screen
+        var buildingPosition = new THREE.Vector3(0, 0, 0);
+        var mosqueBuilding = new MOSQUE.Building(buildingPosition);
+        scene.add(mosqueBuilding.renderBuilding());
+
         // renderHelpers();
         // renderBuilding();
         renderSkybox();
         renderTrees();
-        renderNewBuilding();
+        renderFloor();
 
         var minaretHeight = 36;
         renderMinaret(new THREE.Vector3(-80, minaretHeight/2, 80), minaretHeight); // front left
@@ -111,12 +205,6 @@ MOSQUE.main = (function () {
         renderMinaret(new THREE.Vector3(-80, minaretHeight/2, 0), minaretHeight); // rear left
         renderMinaret(new THREE.Vector3(80, minaretHeight/2, 0), minaretHeight); // rear right
         
-        renderFloor();
-
-        //--------
-        
-
-
     }
 
     /*
@@ -322,86 +410,6 @@ MOSQUE.main = (function () {
     }
 
     /*
-     * Load textures, models and render the 3D building using the new Arch model (imported from Blender)
-     */
-    function renderNewBuilding(){
-        var texture = new THREE.Texture();
-        var arch;
-        var archWidth = 12;
-        var mosqueLeft = new THREE.Object3D();
-
-        // Load textures
-        var manager = new THREE.LoadingManager();
-        manager.onProgress = function ( item, loaded, total ) {
-            // console.log( item, loaded, total );
-        };
-
-        var onProgress = function ( xhr ) {
-            if ( xhr.lengthComputable ) {
-                var percentComplete = xhr.loaded / xhr.total * 100;
-                // console.log( Math.round(percentComplete, 2) + '% downloaded' );
-            }
-        };
-
-        var onError = function ( xhr ) {
-        };
-
-        // Load first texture
-        loader = new THREE.ImageLoader( manager );
-        loader.load( './assets/textures/stone.png', function ( image ) {
-            texture.image = image;
-            texture.needsUpdate = true;
-        } );
-
-        // Load models
-        loader = new THREE.OBJLoader( manager );
-        loader.load( './assets/models/blueArch/blue_arch.obj', function ( object ) {
-
-            object.traverse( function ( child ) {
-                if ( child instanceof THREE.Mesh ) {
-                    child.material.map = texture;
-                }
-            } );
-
-            // object.position.x = -30;
-            object.position.z = 4;
-            object.rotation.y = -Math.PI / 2;
-            
-            for(var i=-80;i<80;i+=archWidth){
-                arch = object.clone();
-                arch.position.x = i;
-                scene.add(arch);
-            }
-
-            object.position.z = 76;
-            for(i=-80;i<80;i+=archWidth){
-                arch = object.clone();
-                arch.position.x = i;
-                scene.add(arch);
-            }
-
-            object.rotation.y = 0;
-            // object.position.z = 76;
-            for(i=-40;i<40;i+=archWidth){
-                arch = object.clone();
-                arch.position.x = -80;
-                arch.position.z = i+40;
-                scene.add(arch);
-            }
-
-            for(i=-40;i<40;i+=archWidth){
-                arch = object.clone();
-                arch.position.x = 80;
-                arch.position.z = i+40;
-                scene.add(arch);
-            }
-
-            
-
-        }, onProgress, onError );
-    }
-
-    /*
      * Render minaret models and place them on the mosque
      * THREE.CylinderGeometry(radiusTop, radiusBottom, height, radiusSegments)
      */
@@ -441,18 +449,19 @@ MOSQUE.main = (function () {
      */
     function renderTrees(){
         var treeObject,
-            treeGroup,
+            treePosition,
+            x,
             treeHeight = 10,
-            treeScale = 1,
-            treePosition = new THREE.Vector3( 78, 0, 0 ),
-            x;
+            treeScale = 1;
 
         for(x=-78;x<78;x+=8){
             treePosition = new THREE.Vector3( x, 0, 0 );
+            treeObject = new MOSQUE.Tree(treePosition, treeHeight, treeScale);
+            scene.add(treeObject.renderTree());
 
-            treeObject = new MOSQUE.Tree(treePosition, treeHeight, treeScale),
-            treeGroup = treeObject.drawTree(); 
-            scene.add(treeGroup);    
+            treePosition = new THREE.Vector3( x, 0, 80 );
+            treeObject = new MOSQUE.Tree(treePosition, treeHeight, treeScale);
+            scene.add(treeObject.renderTree()); 
         }
     }
 
