@@ -59,17 +59,17 @@ MOSQUE.Tree.prototype.drawTree = function(){
     var sphereGeometry3 = new THREE.SphereGeometry( 1.5*this.scale, 32, 32 );
 
     var sphere1 = new THREE.Mesh( sphereGeometry1, sphereMaterial1 );
-    sphere1.position.set(this.position.x-1.2, this.position.y+4, this.position.z);
+    // sphere1.position.set(this.position.x-1.2, this.position.y+4, this.position.z);
+    sphere1.position.set(this.position.x-1.2, this.height*0.45, this.position.z);
     treeGroup.add(sphere1);
 
     var sphere2 = new THREE.Mesh( sphereGeometry2, sphereMaterial2 );
-    sphere2.position.set(this.position.x+1.7, this.position.y+5, this.position.z-0.4);
+    sphere2.position.set(this.position.x+1.7, this.height*0.5, this.position.z-0.4);
     treeGroup.add(sphere2);
 
     var sphere3 = new THREE.Mesh( sphereGeometry3, sphereMaterial3 );
-    sphere3.position.set(this.position.x+0.2, this.position.y+7  , this.position.z-0.4);
+    sphere3.position.set(this.position.x+0.2, this.height*0.6  , this.position.z-0.4);
     treeGroup.add(sphere3);
-
 
     return treeGroup;
 };
@@ -91,23 +91,19 @@ MOSQUE.main = (function () {
     
     var prevTime = performance.now();
     var velocity = new THREE.Vector3();
-    var treeGroup;
     
     /*  
      * Init all functions
      */
     function init() {
-        var treeObject = new MOSQUE.Tree(new THREE.Vector3(-15, 0, 0), 5, 1);
-            treeGroup = treeObject.drawTree();
-
         setScene();
 
         // Render Elements on the Screen
         // renderHelpers();
         // renderBuilding();
         renderSkybox();
-
-        // renderNewBuilding();
+        renderTrees();
+        renderNewBuilding();
 
         var minaretHeight = 36;
         renderMinaret(new THREE.Vector3(-80, minaretHeight/2, 80), minaretHeight); // front left
@@ -118,19 +114,9 @@ MOSQUE.main = (function () {
         renderFloor();
 
         //--------
-        var position = new THREE.Vector3( 0, 0, 0 );
-        var height = 8;
-        var treeScale = 1;
-        // console.log(mosque);
-        // mosque.tree.illustrateTree(position, height, treeScale);
-        //-------------
-        var geometry = new THREE.SphereGeometry( 9, 32, 32 );
-        var material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
-        var sphere = new THREE.Mesh( geometry, material );
-        sphere.position.set(0, 15, 0);
-        // scene.add( sphere );
+        
 
-        scene.add(treeGroup);
+
     }
 
     /*
@@ -146,8 +132,8 @@ MOSQUE.main = (function () {
 
         camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 1000 );
         camera.position.x = -6;
-        camera.position.y = 20;
-        camera.position.z = 30;
+        camera.position.y = 40;
+        camera.position.z = 70;
 
         scene = new THREE.Scene();
 
@@ -446,6 +432,28 @@ MOSQUE.main = (function () {
         var booth = new THREE.Mesh(boothGeometry, material);
         booth.position.set(position.x, position.y, position.z);
         scene.add(booth);
+    }
+
+    /**
+     * Renders all the trees around the Mosque
+     * @class Main
+     * @namespace MOSQUE
+     */
+    function renderTrees(){
+        var treeObject,
+            treeGroup,
+            treeHeight = 10,
+            treeScale = 1,
+            treePosition = new THREE.Vector3( 78, 0, 0 ),
+            x;
+
+        for(x=-78;x<78;x+=8){
+            treePosition = new THREE.Vector3( x, 0, 0 );
+
+            treeObject = new MOSQUE.Tree(treePosition, treeHeight, treeScale),
+            treeGroup = treeObject.drawTree(); 
+            scene.add(treeGroup);    
+        }
     }
 
     /*
