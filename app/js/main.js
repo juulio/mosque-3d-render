@@ -12,21 +12,72 @@
  * THREE.js
  * 3d Mosque
  */
- var mosque = window.mosque || {};
 
-/*
- * Global logic
- * @namespace
+/** @namespace Namespace for MOSQUE classes and functions. */
+var MOSQUE = MOSQUE || {};
+
+// var mosque = window.mosque || {};
+// mosque.main = mosque.main || {};
+
+
+/**
+ * Creates a Tree object
+ * @class Tree
+ * @constructor
+ * @namespace MOSQUE
+ * @param {THREE.Vector3} position
+ * @param {Number} height
+ * @param {Number} scale
  */
+MOSQUE.Tree = function(position, height, scale){
+    this.position = position;
+    this.height = height;
+    this.scale = scale;
+};
 
-(function (context) {
+/**
+ * Renders a new Tree
+ * @class Tree
+ * @namespace MOSQUE
+ */
+MOSQUE.Tree.prototype.drawTree = function(){
+    var treeGroup = new THREE.Group();  
 
-	'use strict';
+    // Tree Trunk
+    var cylinderGeometry = new THREE.CylinderGeometry( 0.35, 0.35, this.height, 32 );
+    var cylinderMaterial = new THREE.MeshBasicMaterial( {color: 0xA0522D} );
+    var trunk = new THREE.Mesh( cylinderGeometry, cylinderMaterial );
+    trunk.position.set(this.position.x, this.position.y+2, this.position.z);
+    treeGroup.add(trunk);
+
+    var sphereMaterial1 = new THREE.MeshBasicMaterial( {color: 0x006400} );
+    var sphereMaterial2 = new THREE.MeshBasicMaterial( {color: 0x32A956} );
+    var sphereMaterial3 = new THREE.MeshBasicMaterial( {color: 0x47AA12} );
+
+    var sphereGeometry1 = new THREE.SphereGeometry( 2*this.scale, 32, 32 );
+    var sphereGeometry2 = new THREE.SphereGeometry( 1.3*this.scale, 32, 32 );
+    var sphereGeometry3 = new THREE.SphereGeometry( 1.5*this.scale, 32, 32 );
+
+    var sphere1 = new THREE.Mesh( sphereGeometry1, sphereMaterial1 );
+    sphere1.position.set(this.position.x-1.2, this.position.y+4, this.position.z);
+    treeGroup.add(sphere1);
+
+    var sphere2 = new THREE.Mesh( sphereGeometry2, sphereMaterial2 );
+    sphere2.position.set(this.position.x+1.7, this.position.y+5, this.position.z-0.4);
+    treeGroup.add(sphere2);
+
+    var sphere3 = new THREE.Mesh( sphereGeometry3, sphereMaterial3 );
+    sphere3.position.set(this.position.x+0.2, this.position.y+7  , this.position.z-0.4);
+    treeGroup.add(sphere3);
 
 
-    var camera, scene, renderer, container;
+    return treeGroup;
+};
 
-    var controls, loader;
+MOSQUE.main = (function () {
+
+    var camera, scene, renderer;
+    var container, controls, loader;
 
     var objects = [];
 
@@ -40,19 +91,23 @@
     
     var prevTime = performance.now();
     var velocity = new THREE.Vector3();
-
+    var treeGroup;
+    
     /*  
      * Init all functions
      */
     function init() {
+        var treeObject = new MOSQUE.Tree(new THREE.Vector3(-15, 0, 0), 5, 1);
+            treeGroup = treeObject.drawTree();
+
         setScene();
 
         // Render Elements on the Screen
         // renderHelpers();
-        renderBuilding();
+        // renderBuilding();
         renderSkybox();
 
-        renderNewBuilding();
+        // renderNewBuilding();
 
         var minaretHeight = 36;
         renderMinaret(new THREE.Vector3(-80, minaretHeight/2, 80), minaretHeight); // front left
@@ -62,13 +117,20 @@
         
         renderFloor();
 
+        //--------
+        var position = new THREE.Vector3( 0, 0, 0 );
+        var height = 8;
+        var treeScale = 1;
+        // console.log(mosque);
+        // mosque.tree.illustrateTree(position, height, treeScale);
+        //-------------
         var geometry = new THREE.SphereGeometry( 9, 32, 32 );
         var material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
         var sphere = new THREE.Mesh( geometry, material );
         sphere.position.set(0, 15, 0);
         // scene.add( sphere );
 
-        
+        scene.add(treeGroup);
     }
 
     /*
@@ -83,9 +145,9 @@
         document.body.appendChild( container );
 
         camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 1000 );
-        camera.position.x = -140;
-        camera.position.y = 40;
-        camera.position.z = 160;
+        camera.position.x = -6;
+        camera.position.y = 20;
+        camera.position.z = 30;
 
         scene = new THREE.Scene();
 
@@ -326,7 +388,7 @@
             }
 
             object.position.z = 76;
-            for(var i=-80;i<80;i+=archWidth){
+            for(i=-80;i<80;i+=archWidth){
                 arch = object.clone();
                 arch.position.x = i;
                 scene.add(arch);
@@ -334,14 +396,14 @@
 
             object.rotation.y = 0;
             // object.position.z = 76;
-            for(var i=-40;i<40;i+=archWidth){
+            for(i=-40;i<40;i+=archWidth){
                 arch = object.clone();
                 arch.position.x = -80;
                 arch.position.z = i+40;
                 scene.add(arch);
             }
 
-            for(var i=-40;i<40;i+=archWidth){
+            for(i=-40;i<40;i+=archWidth){
                 arch = object.clone();
                 arch.position.x = 80;
                 arch.position.z = i+40;
@@ -459,8 +521,9 @@
         mesh.position.setX(-7);
         scene.add( mesh );
     }
+
     /*
-     *
+     * Properly scales elements when the browser is resized
      */
     function onWindowResize() {
         camera.aspect = window.innerWidth / window.innerHeight;
@@ -481,9 +544,9 @@
     }
 
     // Keep only if public vars are needed.
-    context.publicMosque = {
-        camera : camera,
+    return {
         publicScene : scene,
+        init : init
     };
 
-}(mosque));
+}());
