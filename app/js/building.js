@@ -58,7 +58,6 @@ MOSQUE.Building = function(position, size){
             }
         } );
 
-        object.position.z = 4;
         object.rotation.y = -Math.PI / 2;
         
         for(i=-80;i<80;i+=archWidth){
@@ -67,7 +66,7 @@ MOSQUE.Building = function(position, size){
             mosqueBuildingGroup.add(arch);
         }
 
-        object.position.z = 76;
+        object.position.z = 84;
         for(i=-80;i<80;i+=archWidth){
             arch = object.clone();
             arch.position.x = i;
@@ -77,15 +76,15 @@ MOSQUE.Building = function(position, size){
         object.rotation.y = 0;
         for(i=-40;i<40;i+=archWidth){
             arch = object.clone();
-            arch.position.x = -80;
-            arch.position.z = i+40;
+            arch.position.x = -89;
+            arch.position.z = i+46;
             mosqueBuildingGroup.add(arch);
         }
 
         for(i=-40;i<40;i+=archWidth){
             arch = object.clone();
-            arch.position.x = 80;
-            arch.position.z = i+40;
+            arch.position.x = 85;
+            arch.position.z = i+46;
             mosqueBuildingGroup.add(arch);
         }
     }, onProgress, onError );
