@@ -33,24 +33,24 @@ MOSQUE.Main = MOSQUE.Main || (function () {
     function init() {
         setScene();
 
-        var axisHelper = new THREE.AxisHelper( 55 );
-        scene.add( axisHelper );
+        // var axisHelper = new THREE.AxisHelper( 55 );
+        // scene.add( axisHelper );
 
         // Render Elements on the Screen
         // var buildingPosition = new THREE.Vector3(0, 0, 0);
         scene.add(MOSQUE.Building());
         
-        // scene.add(MOSQUE.Skybox(900));
+        scene.add(MOSQUE.Skybox(900));
 
-        // renderTrees();
+        renderTrees();
 
-        // scene.add(MOSQUE.Floor());
+        scene.add(MOSQUE.Floor());
 
-        // var minaretHeight = 36;
-        // scene.add(MOSQUE.Minaret(new THREE.Vector3(-80, minaretHeight/2, 80), minaretHeight)); // front left
-        // scene.add(MOSQUE.Minaret(new THREE.Vector3(80, minaretHeight/2, 80), minaretHeight)); // front right
-        // scene.add(MOSQUE.Minaret(new THREE.Vector3(-80, minaretHeight/2, 0), minaretHeight)); // rear left
-        // scene.add(MOSQUE.Minaret(new THREE.Vector3(80, minaretHeight/2, 0), minaretHeight)); // rear right    
+        var minaretHeight = 36;
+        scene.add(MOSQUE.Minaret(new THREE.Vector3(-80, minaretHeight/2, 80), minaretHeight)); // front left
+        scene.add(MOSQUE.Minaret(new THREE.Vector3(80, minaretHeight/2, 80), minaretHeight)); // front right
+        scene.add(MOSQUE.Minaret(new THREE.Vector3(-80, minaretHeight/2, 0), minaretHeight)); // rear left
+        scene.add(MOSQUE.Minaret(new THREE.Vector3(80, minaretHeight/2, 0), minaretHeight)); // rear right    
     }
 
     /**
@@ -65,9 +65,9 @@ MOSQUE.Main = MOSQUE.Main || (function () {
         document.body.appendChild( container );
 
         camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 1000 );
-        camera.position.x = -80;
+        // camera.position.x = -10;
         camera.position.y = 50;
-        camera.position.z = 140;
+        camera.position.z = 90;
 
         scene = new THREE.Scene();
 

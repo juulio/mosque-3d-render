@@ -25,7 +25,7 @@ MOSQUE.Building = function(position, size){
         texture2,
         manager = new THREE.LoadingManager();
 
-    // Load textures
+    // Texture manager
     manager.onProgress = function ( item, loaded, total ) {
     };
 
@@ -38,6 +38,9 @@ MOSQUE.Building = function(position, size){
     var onError = function ( xhr ) {
     };
 
+    /**
+     * Render outer archs
+     */
     var renderOuterArchs = function(){
         var outerArchsGroup = new THREE.Object3D();
         var archWidth = 12;
@@ -65,7 +68,7 @@ MOSQUE.Building = function(position, size){
             for(i=-80;i<80;i+=archWidth){
                 arch = object.clone();
                 arch.position.x = i;
-                outerArchsGroup.add(arch);
+                // outerArchsGroup.add(arch);
             }
 
             object.position.z = 84;
@@ -95,15 +98,15 @@ MOSQUE.Building = function(position, size){
     };
 
     /**
-     * Render outer archs
+     * Render main building
      */
-    var renderMainBuilding = function(){
+    var renderMainBuilding = function(position){
         var mainBuildingGroup = new THREE.Object3D();
         
         texture = new THREE.Texture();
         texture2 = new THREE.Texture();
 
-        
+        // Load first texture
         loader = new THREE.ImageLoader( manager );
         loader.load( './assets/textures/stone.png', function ( image ) {
             texture.image = image;
@@ -126,74 +129,51 @@ MOSQUE.Building = function(position, size){
                     child.material.map = texture;
                 }
             } );
-            object.position.x = -19;
+            
             object.rotation.y = -Math.PI / 2;
-            object.position.z = -19;
+            object.scale.set(8, 8, 8);
 
-            // 1. Render back side archs
-            // 1.a First Level Archs
+            // Render back side archs
             // Render left side archs
-            for(i=0;i<10;i+=2){
+            for(i=position.x-20;i>position.x-60;i-=16){
                 arch = object.clone();
-                arch.position.x = i;
+                arch.position.x = position.x+i;
+                arch.position.z = position.z-60;
                 mainBuildingGroup.add( arch );
-
-                if(i>1){
-                    arch = object.clone();
-                    arch.position.x = i;
-                    arch.position.y = 3;
-                    mainBuildingGroup.add( arch );    
-                }
             }
 
             // Render right side archs
-            for(i=14;i<24;i+=2){
+            for(i=position.x+20;i<position.x+66;i+=16){
                 arch = object.clone();
                 arch.position.x = i;
+                arch.position.z = position.z-60;
                 mainBuildingGroup.add( arch );
-
-                if(i<22){
-                    arch = object.clone();
-                    arch.position.x = i;
-                    arch.position.y = 3;
-                    mainBuildingGroup.add( arch );    
-                }
             }
 
-            // 1.b 2nd level archs
             // Render big central arch
             arch = object.clone();
-            arch.position.x = 11;
-            arch.position.y = 6;
-            arch.scale.y = 2;
-            arch.scale.z = 2;
+            arch.position.y = position.y+30;
+            arch.position.z = position.z-62;
+            arch.scale.set(10, 10, 10);
             mainBuildingGroup.add(arch);
 
-            // Render 2 small central archs
-            arch = object.clone();
-            arch.position.x = 8;
-            arch.position.y = 6;
-            mainBuildingGroup.add(arch);
-
-            arch = object.clone();
-            arch.position.x = 14;
-            arch.position.y = 6;
-            mainBuildingGroup.add(arch);
-
-            // 1. Render side archs
-            // 2.a First Level Archs
-            var leftSideArch, rightSideArch;
-            for(i=-19;i<10;i+=2){
+            // Render left side archs
+            var leftSideArch
+            for(i=position.z-44;i<position.z-8;i+=16){
+                object.rotation.y = Math.PI;
                 leftSideArch = object.clone();
-                leftSideArch.position.x = -2;
+                leftSideArch.position.x = -68;
                 leftSideArch.position.z = i;
-                leftSideArch.rotation.y = Math.PI;
                 mainBuildingGroup.add(leftSideArch);
+            }
 
-                rightSideArch = leftSideArch.clone();
-                rightSideArch.position.x = 24;
+            // Render right side archs
+            var righttSideArch
+            for(i=position.z-44;i<position.z-8;i+=16){
+                object.rotation.y = 0;
+                rightSideArch = object.clone();
+                rightSideArch.position.x = 68;
                 rightSideArch.position.z = i;
-                rightSideArch.rotation.y = -Math.PI;
                 mainBuildingGroup.add(rightSideArch);
             }
 
@@ -209,11 +189,9 @@ MOSQUE.Building = function(position, size){
                 }
             } );
 
-            object.position.x = 11;
-            object.position.z = -19;
+            object.position.z = position.z-62;
             object.rotation.y = -Math.PI / 2;
-            object.scale.y = 2;
-            object.scale.z = 2;
+            object.scale.set(10, 10, 10);
             mainBuildingGroup.add( object );
 
         }, onProgress, onError );
@@ -221,11 +199,13 @@ MOSQUE.Building = function(position, size){
         return mainBuildingGroup;
     };
 
-    var mainBuilding = renderMainBuilding();
+    var buildingPosition = new THREE.Vector3(0, 0, 0);
+
+    var mainBuilding = renderMainBuilding(buildingPosition);
     var outerArchs = renderOuterArchs();
 
     mosqueBuildingGroup.add(mainBuilding);
-    // mosqueBuildingGroup.add(outerArchs);
+    mosqueBuildingGroup.add(outerArchs);
     
     return mosqueBuildingGroup;
 };
