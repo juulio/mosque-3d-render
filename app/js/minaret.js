@@ -16,7 +16,6 @@ var MOSQUE = MOSQUE || {};
  * @param {Number} height
  * @param {Number} scale
  * THREE.CylinderGeometry(radiusTop, radiusBottom, height, radiusSegments)
-
  */
 MOSQUE.Minaret = function(position, height){
     var minaretGroup = new THREE.Group();  
