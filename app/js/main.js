@@ -1,12 +1,4 @@
 /*
- * TODO
- * Define Building structure: 4 minarets
- * Maybe separate code into several files
- * Update Gulp Boilerplate
- * Update THREE.js boilerplate
- */
-
-/*
  * Julio Del Valle
  * 3d Mosque
  * THREE.js
@@ -17,61 +9,6 @@ var MOSQUE = MOSQUE || {};
 
 // var mosque = window.mosque || {};
 // mosque.main = mosque.main || {};
-
-
-/**
- * Creates a Tree object
- * @class Tree
- * @constructor
- * @namespace MOSQUE
- * @param {THREE.Vector3} position
- * @param {Number} height
- * @param {Number} scale
- */
-// MOSQUE.Tree = function(position, height, scale){
-//     this.position = position;
-//     this.height = height;    
-//     this.scale = scale;
-// };
-
-// /**
-//  * Renders a new Tree
-//  * @class Tree
-//  * @namespace MOSQUE
-//  */
-// MOSQUE.Tree.prototype.renderTree = function(){
-//     var treeGroup = new THREE.Group();  
-
-//     // Tree Trunk
-//     var cylinderGeometry = new THREE.CylinderGeometry( 0.35, 0.35, this.height, 32 );
-//     var cylinderMaterial = new THREE.MeshBasicMaterial( {color: 0xA0522D} );
-//     var trunk = new THREE.Mesh( cylinderGeometry, cylinderMaterial );
-//     trunk.position.set(this.position.x, this.position.y+2, this.position.z);
-//     treeGroup.add(trunk);
-
-//     var sphereMaterial1 = new THREE.MeshBasicMaterial( {color: 0x006400} );
-//     var sphereMaterial2 = new THREE.MeshBasicMaterial( {color: 0x32A956} );
-//     var sphereMaterial3 = new THREE.MeshBasicMaterial( {color: 0x47AA12} );
-
-//     var sphereGeometry1 = new THREE.SphereGeometry( 2*this.scale, 32, 32 );
-//     var sphereGeometry2 = new THREE.SphereGeometry( 1.3*this.scale, 32, 32 );
-//     var sphereGeometry3 = new THREE.SphereGeometry( 1.5*this.scale, 32, 32 );
-
-//     var sphere1 = new THREE.Mesh( sphereGeometry1, sphereMaterial1 );
-//     // sphere1.position.set(this.position.x-1.2, this.position.y+4, this.position.z);
-//     sphere1.position.set(this.position.x-1.2, this.height*0.45, this.position.z);
-//     treeGroup.add(sphere1);
-
-//     var sphere2 = new THREE.Mesh( sphereGeometry2, sphereMaterial2 );
-//     sphere2.position.set(this.position.x+1.7, this.height*0.5, this.position.z-0.4);
-//     treeGroup.add(sphere2);
-
-//     var sphere3 = new THREE.Mesh( sphereGeometry3, sphereMaterial3 );
-//     sphere3.position.set(this.position.x+0.2, this.height*0.6  , this.position.z-0.4);
-//     treeGroup.add(sphere3);
-
-//     return treeGroup;
-// };
 
 /**
  * Creates a Building object
@@ -187,13 +124,14 @@ MOSQUE.Main = MOSQUE.Main || (function () {
 
         renderTrees();
 
-        renderFloor();
+        var floor = MOSQUE.Floor();
+        scene.add(floor);
 
         var minaretHeight = 36;
-        renderMinaret(new THREE.Vector3(-80, minaretHeight/2, 80), minaretHeight); // front left
-        renderMinaret(new THREE.Vector3(80, minaretHeight/2, 80), minaretHeight); // front right
-        renderMinaret(new THREE.Vector3(-80, minaretHeight/2, 0), minaretHeight); // rear left
-        renderMinaret(new THREE.Vector3(80, minaretHeight/2, 0), minaretHeight); // rear right    
+        scene.add(MOSQUE.Minaret(new THREE.Vector3(-80, minaretHeight/2, 80), minaretHeight)); // front left
+        scene.add(MOSQUE.Minaret(new THREE.Vector3(80, minaretHeight/2, 80), minaretHeight)); // front right
+        scene.add(MOSQUE.Minaret(new THREE.Vector3(-80, minaretHeight/2, 0), minaretHeight)); // rear left
+        scene.add(MOSQUE.Minaret(new THREE.Vector3(80, minaretHeight/2, 0), minaretHeight)); // rear right    
     }
 
     /*
@@ -232,17 +170,6 @@ MOSQUE.Main = MOSQUE.Main || (function () {
         controls = new THREE.OrbitControls( camera, renderer.domElement );
 
         window.addEventListener( 'resize', onWindowResize, false );
-    }
-
-    /*
-     *
-     */
-    function renderHelpers(){
-        var gridXZ = new THREE.GridHelper(60, 33);
-        // scene.add(gridXZ);
-
-        var axisHelper = new THREE.AxisHelper( 25 );
-        scene.add( axisHelper );
     }
 
     /*
@@ -398,39 +325,6 @@ MOSQUE.Main = MOSQUE.Main || (function () {
         // console.log(scene);  
     }
 
-    /*
-     * Render minaret models and place them on the mosque
-     * THREE.CylinderGeometry(radiusTop, radiusBottom, height, radiusSegments)
-     */
-    function renderMinaret(position, height){
-        var arabicTexture =  new THREE.TextureLoader().load('./assets/textures/arabic08.jpg');
-        var material = new THREE.MeshBasicMaterial( { map: arabicTexture } );
-        var minaretGeometry = new THREE.CylinderGeometry( 1, 1, height, 32 );
-
-
-        var minaret = new THREE.Mesh(minaretGeometry, material);
-        minaret.position.set(position.x, position.y, position.z);
-        scene.add(minaret);
-
-        renderBooth(position, 1.5);
-        renderBooth(new THREE.Vector3(position.x, position.y+12, position.z), 1.5);
-        renderBooth(new THREE.  Vector3(position.x, position.y+20, position.z), 2.7);
-
-        renderCone(position);
-    }
-
-    /*
-     * Render the booths on minarets
-     */
-    function renderBooth(position, radius){
-        var stoneTexture =  new THREE.TextureLoader().load('./assets/textures/arabic08.jpg');
-        var material = new THREE.MeshBasicMaterial( { map: stoneTexture } );
-        var boothGeometry = new THREE.CylinderGeometry( radius, radius, 5, 5 );
-        var booth = new THREE.Mesh(boothGeometry, material);
-        booth.position.set(position.x, position.y, position.z);
-        scene.add(booth);
-    }
-
     /**
      * Renders all the trees around the Mosque
      * @class Main
@@ -451,18 +345,6 @@ MOSQUE.Main = MOSQUE.Main || (function () {
             // treeObject = new MOSQUE.Tree(treePosition, treeHeight, treeScale);
             scene.add(MOSQUE.Tree(treePosition, treeHeight, treeScale)); 
         }
-    }
-
-    /*
-     * Render the cone on top of the minaret
-     * ConeGeometry(radius, height, radialSegments, heightSegments)
-     */
-    function renderCone(position){
-        var geometry = new THREE.ConeGeometry( 3, 6, 32 );
-        var material = new THREE.MeshBasicMaterial( {color: 0xeecbad} );
-        var cone = new THREE.Mesh( geometry, material );
-        cone.position.set(position.x, position.y+25, position.z);
-        scene.add( cone );
     }
 
     /*
@@ -489,42 +371,6 @@ MOSQUE.Main = MOSQUE.Main || (function () {
         );
 
         scene.add( skybox );
-    }
-
-    /*
-     * Render floor
-     */
-    function renderFloor(){
-        var geometry = new THREE.PlaneGeometry( 160, 80, 100, 100 );
-        geometry.rotateX( - Math.PI / 2 );
-
-        for ( var i = 0, l = geometry.vertices.length; i < l; i ++ ) {
-
-            var vertex = geometry.vertices[ i ];
-            vertex.x += Math.random() * 20 - 1;
-            // vertex.y += Math.random() * 4;
-            vertex.y += Math.random() * 1;
-            vertex.z += Math.random() * 15 - 10;
-        }
-
-        for ( i = 0, l = geometry.faces.length; i < l; i ++ ) {
-
-            var face = geometry.faces[ i ];
-            // face.vertexColors[ 0 ] = new THREE.Color().setHSL( Math.random() * 0.3 + 0.5, 0.75, Math.random() * 0.25 + 0.75 );
-            // face.vertexColors[ 1 ] = new THREE.Color().setHSL( Math.random() * 0.3 + 0.5, 0.75, Math.random() * 0.25 + 0.75 );
-            // face.vertexColors[ 2 ] = new THREE.Color().setHSL( Math.random() * 0.3 + 0.5, 0.75, Math.random() * 0.25 + 0.75 );
-            face.vertexColors[ 0 ] = new THREE.Color().setRGB(1, 0.972, 0.862);
-            face.vertexColors[ 1 ] = new THREE.Color().setRGB(0.713, 0.439, 0.227);
-            face.vertexColors[ 2 ] = new THREE.Color().setRGB(0.580, 0.419, 0.298);
-
-        }
-
-        var material = new THREE.MeshBasicMaterial( { vertexColors: THREE.VertexColors } );
-
-        var mesh = new THREE.Mesh( geometry, material );
-        mesh.position.setZ(40);
-        mesh.position.setX(-7);
-        scene.add( mesh );
     }
 
     /*
