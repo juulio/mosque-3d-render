@@ -33,24 +33,27 @@ MOSQUE.Main = MOSQUE.Main || (function () {
     function init() {
         setScene();
 
+        var axisHelper = new THREE.AxisHelper( 55 );
+        scene.add( axisHelper );
+
         // Render Elements on the Screen
         // var buildingPosition = new THREE.Vector3(0, 0, 0);
         scene.add(MOSQUE.Building());
         
-        scene.add(MOSQUE.Skybox(900));
+        // scene.add(MOSQUE.Skybox(900));
 
-        renderTrees();
+        // renderTrees();
 
-        scene.add(MOSQUE.Floor());
+        // scene.add(MOSQUE.Floor());
 
-        var minaretHeight = 36;
-        scene.add(MOSQUE.Minaret(new THREE.Vector3(-80, minaretHeight/2, 80), minaretHeight)); // front left
-        scene.add(MOSQUE.Minaret(new THREE.Vector3(80, minaretHeight/2, 80), minaretHeight)); // front right
-        scene.add(MOSQUE.Minaret(new THREE.Vector3(-80, minaretHeight/2, 0), minaretHeight)); // rear left
-        scene.add(MOSQUE.Minaret(new THREE.Vector3(80, minaretHeight/2, 0), minaretHeight)); // rear right    
+        // var minaretHeight = 36;
+        // scene.add(MOSQUE.Minaret(new THREE.Vector3(-80, minaretHeight/2, 80), minaretHeight)); // front left
+        // scene.add(MOSQUE.Minaret(new THREE.Vector3(80, minaretHeight/2, 80), minaretHeight)); // front right
+        // scene.add(MOSQUE.Minaret(new THREE.Vector3(-80, minaretHeight/2, 0), minaretHeight)); // rear left
+        // scene.add(MOSQUE.Minaret(new THREE.Vector3(80, minaretHeight/2, 0), minaretHeight)); // rear right    
     }
 
-    /*
+    /**
      * Sets initial elements for the scene
      */
     function setScene(){
@@ -62,9 +65,9 @@ MOSQUE.Main = MOSQUE.Main || (function () {
         document.body.appendChild( container );
 
         camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 1000 );
-        camera.position.x = -6;
-        camera.position.y = 40;
-        camera.position.z = 70;
+        camera.position.x = -80;
+        camera.position.y = 50;
+        camera.position.z = 140;
 
         scene = new THREE.Scene();
 
@@ -110,7 +113,7 @@ MOSQUE.Main = MOSQUE.Main || (function () {
         }
     }
 
-    /*
+    /**
      * Properly scales elements when the browser is resized
      */
     function onWindowResize() {
@@ -120,21 +123,18 @@ MOSQUE.Main = MOSQUE.Main || (function () {
         renderer.setSize( window.innerWidth, window.innerHeight );
     }
 
-    /*
-     *
+    /**
+     * Animate elements on the screen
      */
     function animate() {
-
         requestAnimationFrame( animate );
-
-
         renderer.render( scene, camera );
     }
 
     // Keep only if public vars are needed.
-    return {
-        publicScene : scene,
-        init : init
-    };
+    // return {
+    //     publicScene : scene,
+    //     init : init
+    // };
 
 }());
