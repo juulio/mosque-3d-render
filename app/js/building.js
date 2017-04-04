@@ -38,8 +38,8 @@ MOSQUE.Building = function(position, size){
     var onError = function ( xhr ) {
     };
 
-    var renderMainBuilding = function(){
-        var mainBuildingGroup = new THREE.Object3D();
+    var renderOuterArchs = function(){
+        var outerArchsGroup = new THREE.Object3D();
         var archWidth = 12;
         texture = new THREE.Texture();
 
@@ -65,14 +65,14 @@ MOSQUE.Building = function(position, size){
             for(i=-80;i<80;i+=archWidth){
                 arch = object.clone();
                 arch.position.x = i;
-                mainBuildingGroup.add(arch);
+                outerArchsGroup.add(arch);
             }
 
             object.position.z = 84;
             for(i=-80;i<80;i+=archWidth){
                 arch = object.clone();
                 arch.position.x = i;
-                mainBuildingGroup.add(arch);
+                outerArchsGroup.add(arch);
             }
 
             object.rotation.y = 0;
@@ -80,25 +80,25 @@ MOSQUE.Building = function(position, size){
                 arch = object.clone();
                 arch.position.x = -89;
                 arch.position.z = i+46;
-                mainBuildingGroup.add(arch);
+                outerArchsGroup.add(arch);
             }
 
             for(i=-40;i<40;i+=archWidth){
                 arch = object.clone();
                 arch.position.x = 85;
                 arch.position.z = i+46;
-                mainBuildingGroup.add(arch);
+                outerArchsGroup.add(arch);
             }
         }, onProgress, onError );
 
-        return mainBuildingGroup;
+        return outerArchsGroup;
     };
 
     /**
      * Render outer archs
      */
-    var renderOuterArchs = function(){
-        var outerArchsGroup = new THREE.Object3D();
+    var renderMainBuilding = function(){
+        var mainBuildingGroup = new THREE.Object3D();
         
         texture = new THREE.Texture();
         texture2 = new THREE.Texture();
@@ -136,13 +136,13 @@ MOSQUE.Building = function(position, size){
             for(i=0;i<10;i+=2){
                 arch = object.clone();
                 arch.position.x = i;
-                outerArchsGroup.add( arch );
+                mainBuildingGroup.add( arch );
 
                 if(i>1){
                     arch = object.clone();
                     arch.position.x = i;
                     arch.position.y = 3;
-                    outerArchsGroup.add( arch );    
+                    mainBuildingGroup.add( arch );    
                 }
             }
 
@@ -150,13 +150,13 @@ MOSQUE.Building = function(position, size){
             for(i=14;i<24;i+=2){
                 arch = object.clone();
                 arch.position.x = i;
-                outerArchsGroup.add( arch );
+                mainBuildingGroup.add( arch );
 
                 if(i<22){
                     arch = object.clone();
                     arch.position.x = i;
                     arch.position.y = 3;
-                    outerArchsGroup.add( arch );    
+                    mainBuildingGroup.add( arch );    
                 }
             }
 
@@ -167,18 +167,18 @@ MOSQUE.Building = function(position, size){
             arch.position.y = 6;
             arch.scale.y = 2;
             arch.scale.z = 2;
-            outerArchsGroup.add(arch);
+            mainBuildingGroup.add(arch);
 
             // Render 2 small central archs
             arch = object.clone();
             arch.position.x = 8;
             arch.position.y = 6;
-            outerArchsGroup.add(arch);
+            mainBuildingGroup.add(arch);
 
             arch = object.clone();
             arch.position.x = 14;
             arch.position.y = 6;
-            outerArchsGroup.add(arch);
+            mainBuildingGroup.add(arch);
 
             // 1. Render side archs
             // 2.a First Level Archs
@@ -188,13 +188,13 @@ MOSQUE.Building = function(position, size){
                 leftSideArch.position.x = -2;
                 leftSideArch.position.z = i;
                 leftSideArch.rotation.y = Math.PI;
-                outerArchsGroup.add(leftSideArch);
+                mainBuildingGroup.add(leftSideArch);
 
                 rightSideArch = leftSideArch.clone();
                 rightSideArch.position.x = 24;
                 rightSideArch.position.z = i;
                 rightSideArch.rotation.y = -Math.PI;
-                outerArchsGroup.add(rightSideArch);
+                mainBuildingGroup.add(rightSideArch);
             }
 
         }, onProgress, onError );
@@ -210,23 +210,22 @@ MOSQUE.Building = function(position, size){
             } );
 
             object.position.x = 11;
-            // object.position.y = 26;
             object.position.z = -19;
             object.rotation.y = -Math.PI / 2;
             object.scale.y = 2;
             object.scale.z = 2;
-            outerArchsGroup.add( object );
+            mainBuildingGroup.add( object );
 
         }, onProgress, onError );
 
-        return outerArchsGroup;
+        return mainBuildingGroup;
     };
 
     var mainBuilding = renderMainBuilding();
     var outerArchs = renderOuterArchs();
 
     mosqueBuildingGroup.add(mainBuilding);
-    mosqueBuildingGroup.add(outerArchs);
+    // mosqueBuildingGroup.add(outerArchs);
     
     return mosqueBuildingGroup;
 };
