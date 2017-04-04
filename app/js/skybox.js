@@ -9,7 +9,7 @@ var MOSQUE = MOSQUE || {};
 
 /**
  * Renders a Skybox
- * @class Skybo
+ * @class Skybox
  * @constructor
  * @namespace MOSQUE
  */
